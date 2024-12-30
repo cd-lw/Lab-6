@@ -13,10 +13,10 @@ typedef struct student{
 } student;
 
 typedef struct node{
-    int index;
-    student current_stu;
+   // int index;
+    student student;
     struct node *next;
-    struct node *previous;
+    struct node *prev;
     
 } node;
 
@@ -36,7 +36,8 @@ db->head = NULL; */
 
 int student_index = 0;
 
-node *head = NULL; //head of database points at nothing at first
+node *head = NULL; //head of the list, points to nothing at init
+node *p = NULL; //Mediary pointer
 
 void add_student(){ 
 
@@ -44,35 +45,38 @@ void add_student(){
 
     node* new_node = (node*) malloc (sizeof(node));
 
-    student* tempstudent = (student*) malloc (sizeof(student));
+    student* new_student  = (student*) malloc (sizeof(student));
 
-    new_node->current_stu = *tempstudent;
-    new_node->index = student_index;
-
-    head = new_node; //the newly added student becomes the head of the list
-
-    if (tempstudent == NULL){
+    if (new_student == NULL){
         printf("Error allocating memory");
         exit(0);
     }
 
+    head = new_node; //the newly added student becomes the head of the list
+   
+    new_node->next = NULL; //So that the last pointer in the list is always NULL
+
+    head->next = p;
+
+    p = new_node;
+
     printf("Enter Personnummer: ");
-    scanf("%d", &tempstudent->per_num);
+    scanf("%d", &new_student->per_num);
 
     printf("Enter first and last name: ");
-    scanf("%s %s", &tempstudent->first_name, &tempstudent->last_name);
+    scanf("%s %s", &new_student->first_name, &new_student->last_name);
 
     printf("Enter gender (M/F): ");
-    scanf("%s", &tempstudent->gender);
+    scanf("%s", &new_student->gender);
 
     printf("Enter Program: ");
-    scanf("%s", &tempstudent->program);
+    scanf("%s", &new_student->program);
 
     printf("Enter age: ");
-    scanf("%d", &tempstudent->age);
+    scanf("%d", &new_student->age);
 
     printf("Enter Email: ");
-    scanf("%s", &tempstudent->email);
+    scanf("%s", &new_student->email);
 
     printf("\n\n");
 
@@ -94,17 +98,6 @@ void add_student(){
     current -> next = new_node;
     new_node -> previous = current;
     new_node -> next = NULL */;
-
-
-    /* 
-    printf("%d ", tempstudent->per_num);
-    printf("%s ", tempstudent->first_name);
-    printf("%s ", tempstudent->last_name);
-    printf("%c ", tempstudent->gender);
-    printf("%s ", tempstudent->program);
-    printf("%d ", tempstudent->age);
-    printf("%s ", tempstudent->email);
-    */
 
 }
 
