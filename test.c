@@ -32,6 +32,13 @@ void main(){
 
     new_node->current_stu = *new_student;
     new_node->index = student_index;
+    new_node->next = new_node;
+
+    if (student_index == 0) { 
+        new_node->next = NULL;
+    }
+
+    //sets first node's "next" pointer to NULL to indicate since it is the last in the list
 
     student_index += 1; //Adds 1 to student index counter
 
