@@ -80,6 +80,17 @@ void add_student(){
 
     printf("\n\n");
 
+    char yn;
+
+    printf("Would you like to enter another student?");
+    scanf(" %s", yn);
+
+    if (yn = 'y') {
+        add_student();
+    }
+
+    else return;
+
    /*  if (head==NULL) {
         head = new_node;
         new_node->previous = NULL;

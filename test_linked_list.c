@@ -6,48 +6,55 @@ typedef struct node {
 int index;
 int data;
 struct node *next;
-struct node *previous;
+struct node *prev;
 } node;
 
-int outer_index = 0;
+int i = 0;
 
 node *head = NULL; //Entryway at the top of the list, points to most recently added node
-node *p = NULL; // "Mediary" pointer for new_node and head
+node *old_node = NULL; //"Mediary" next pointer
+node *future_node = NULL; //"Mediary" previous pointer
 
 void main(){
 
     node* new_node = (node*) malloc (sizeof(node));
 
-    new_node->index = outer_index; //creates index for every node
+    new_node->next = NULL;
+
+    new_node->prev = NULL;
 
     head = new_node; //The head points to the new node
     
-    /* if (new_node->index == 0) {
-        new_node->next = NULL;
-        p = new_node;
-    } */
-    
-    /* else {
-        head->next = p;
-        p = new_node;
-    } */
+    head->next = old_node; //the next node is the previously created node
 
-    head->next = p; //The node that the head points to, is made the same as the node that p points to (the previous node)
-    
-    p = new_node; //p now points to the new node
+    old_node = new_node; //the newly added node is turned into the old node    
 
-    outer_index += 1;
+    if (i != 0) {
+        new_node = old_node->prev; //the future node is set at the position of the added nodes previous node
+    }
+
+    i+=1;
 
     printf("Enter data: ");
     scanf("%d", &new_node->data);
     printf("\n\n");
 
-    while (head != NULL) {
-        printf("%d-->", head->data);
-        head = head->next; //advance the position of the head down the list until it reaches NULL
+    node *temp_head = head;
+
+    while (temp_head != NULL) {
+        printf("%d-->", temp_head->data);
+        temp_head = temp_head->next; //advance the position of the head down the list until it reaches NULL
+        //temp_head = temp_head->prev;
     }
-    
+
     printf("\n\n");
 
-    main(); //Call "add node" function
+   /*  while (temp_head != NULL) {
+        printf("<--%d", temp_head->data);
+        temp_head = temp_head->prev;
+    } */
+
+    printf("\n\n");
+ 
+    main();
 }
