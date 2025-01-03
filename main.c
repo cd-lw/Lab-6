@@ -19,17 +19,15 @@ typedef struct node{
     
 } node;
 
-int student_index = 0;
-
 node *head = NULL; //head of the list, points to nothing at init
 
 void add_student(){ 
 
-    student_index += 1; //Adds 1 to student index counter
-
     node* new_node = (node*) malloc (sizeof(node));
 
     student* new_student  = (student*) malloc (sizeof(student));
+
+    //                              NEED TO ADD "FREE"
 
     if (new_student == NULL){
         printf("Error allocating memory");
@@ -61,7 +59,7 @@ void add_student(){
     printf("Enter Personnummer: ");
     scanf("%d", &new_student->per_num);
 
-     printf("Enter first and last name: ");
+    printf("Enter first and last name: ");
     scanf("%s %s", &new_student->first_name, &new_student->last_name); 
 
     printf("Enter gender (M/F): ");
@@ -78,26 +76,14 @@ void add_student(){
 
     printf("\n\n");
 
-    char yn;
+    /* node *temp = head; 
 
-    printf("Would you like to enter another student? \nEnter y for yes and any other key for no.");
-
-    scanf(" %c", &yn);
-
-    printf("\r\n\n");
-
-    if (yn == 'y') {
-        add_student();
+    while(temp != NULL) {
+        printf("%d-->", temp->student->per_num);
+        temp = temp->next; // Move down the list to the last node
     }
 
-        node *temp = head; 
-
-        while(temp != NULL) {
-            printf("%d-->", temp->student->per_num);
-            temp = temp->next; // Move down the list to the last node
-        }
-
-        printf("\n");
+    printf("\n"); */
  
     /* while(temp != NULL && temp->next != NULL) {
         temp = temp->next; // Move down the list to the last node
@@ -110,6 +96,7 @@ void add_student(){
 
     printf("\n"); */
 
+    return head; //returns the head pointer of the list
 }
 
 
@@ -232,6 +219,35 @@ The program asks for a file name and saves all information in the database into 
 it will be overwritten and if it does not exist it has to be created
 */
 
+    char *filename;
+
+    printf("Please enter the file you would like to save to. If no such file exists a new one will be created.\nAny pre-existing information in the file will be overwritten");
+    scanf("");
+
+    FILE *filptr = fopen(filename, "w");
+
+    node *temp = head;
+
+    while (temp != NULL) {
+
+        fprintf(filptr, "%d,", temp->student->per_num);      //per_num
+        fprintf(filptr, "%s,", temp->student->first_name);   //first_name
+        fprintf(filptr, "%s,", temp->student->last_name);    //last_name
+        fprintf(filptr, "%s,", temp->student->gender);       //gender
+        fprintf(filptr, "%s,", temp->student->program);      //program
+        fprintf(filptr, "%d,", temp->student->age);          //age
+        fprintf(filptr, "%s,", temp->student->email);        //email
+        
+        fprintf(filptr, "\n");
+        
+        temp = temp->next;
+    }
+
+    printf("\n\nWrote to file\n\n");
+
+    fclose(filptr);
+    
+    return;
 }
 
 void load_file(){
@@ -239,6 +255,44 @@ void load_file(){
 The program asks for a file name. If the file exists its contents will be loaded into the database. Note that the current information
 in the database will be overwritten by the information from the file. Therefore the program asks for a confirmation from the user.
 */
+
+    head = NULL; //Makes head  NULL since any previous information in the database will be overwritten/discarded
+
+    int pnum_var;
+    
+    scanf("%d", &new_student->per_num);
+
+    scanf("%s %s", &new_student->first_name, &new_student->last_name); 
+
+    scanf("%s", &new_student->gender);
+
+    scanf("%s", &new_student->program);
+
+    scanf("%d", &new_student->age);
+
+    scanf("%s", &new_student->email); 
+
+    printf("\n\n");
+
+    /* node *temp = head; 
+
+    while(temp != NULL) {
+        printf("%d-->", temp->student->per_num);
+        temp = temp->next; // Move down the list to the last node
+    }
+
+    printf("\n"); */
+ 
+    /* while(temp != NULL && temp->next != NULL) {
+        temp = temp->next; // Move down the list to the last node
+    }
+
+    while (temp != NULL){
+        printf("%d<--", temp->student.first_name);
+        temp = temp->prev; // Start moving up towards the head
+    }
+
+    printf("\n"); */
 
 }
 
@@ -258,11 +312,14 @@ The program ask the program by asking its code and let the user to modify inform
 }
 
 void exit_function(){
-/*
-The program sks to save the database. Then it will do the same actions in option 5 (Save) and then exits.
-*/
+    /*
+    The program sks to save the database. Then it will do the same actions in option 5 (Save) and then exits.
+    */
+
+    exit(0);
 
 }
+
 int main(){
     
 node * head = NULL;
@@ -273,10 +330,25 @@ printf("Enter a number:\n 1. Add\n 2. Modify\n 3. Delete\n 4. Search\n 5. Save\n
 scanf("%d", &choice);
 
 switch (choice){
+
     case 1:
+        plus_student:
+
         add_student();
 
-    break;
+        char yn;
+
+        printf("Would you like to enter another student? \nEnter y for yes. Enter any other key for no.");
+
+        scanf(" %c", &yn);
+
+        printf("\r\n\n");
+
+        if (yn == 'y') {
+            goto plus_student;
+        }
+
+    break; //A while loop could have been used here but a goto statement felt more readable and thus more fitting in this case
 
     case 2:
         modify_student();
@@ -290,26 +362,31 @@ switch (choice){
 
     case 4:
         search_student();
+
     break;
 
     case 5:
         save_file();
+
     break;
 
     case 6:
         load_file();
+
     break;
 
     case 7:
         add_program();
+
     break;
 
     case 8:
         modify_program();
+
     break;
 
     case 9:
-    exit_function();
+        exit_function();
     
     break;
 
