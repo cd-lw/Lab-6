@@ -21,7 +21,7 @@ typedef struct node{
 
 node *head = NULL; //head of the list, points to nothing at init
 
-void add_student(){ 
+void add_student(int per_num, char *first_name, char *last_name, char *gender, char *program, int age, char *email){ 
 
     node* new_node = (node*) malloc (sizeof(node));
 
@@ -56,23 +56,19 @@ void add_student(){
         new_node->prev = temp;
     }
 
-    printf("Enter Personnummer: ");
-    scanf("%d", &new_student->per_num);
+    new_student->per_num = per_num;
 
-    printf("Enter first and last name: ");
-    scanf("%s %s", &new_student->first_name, &new_student->last_name); 
+    *new_student->first_name = first_name;
 
-    printf("Enter gender (M/F): ");
-    scanf("%s", &new_student->gender);
+    *new_student->last_name = last_name;
 
-    printf("Enter Program: ");
-    scanf("%s", &new_student->program);
+    new_student->gender = gender;
 
-    printf("Enter age: ");
-    scanf("%d", &new_student->age);
+    *new_student->program = program;
 
-    printf("Enter Email: ");
-    scanf("%s", &new_student->email); 
+    new_student->age = age;
+
+    *new_student->email = email;
 
     printf("\n\n");
 
@@ -258,9 +254,7 @@ in the database will be overwritten by the information from the file. Therefore 
 
     head = NULL; //Makes head  NULL since any previous information in the database will be overwritten/discarded
 
-    int pnum_var;
-    
-    scanf("%d", &new_student->per_num);
+   /*  scanf("%d", &new_student->per_num);
 
     scanf("%s %s", &new_student->first_name, &new_student->last_name); 
 
@@ -270,7 +264,7 @@ in the database will be overwritten by the information from the file. Therefore 
 
     scanf("%d", &new_student->age);
 
-    scanf("%s", &new_student->email); 
+    scanf("%s", &new_student->email);  */
 
     printf("\n\n");
 
@@ -321,6 +315,14 @@ void exit_function(){
 }
 
 int main(){
+
+int per_num;
+char first_name[50];
+char last_name[50];
+char gender[3];
+char program[50];
+int age;
+char email[100];
     
 node * head = NULL;
 
@@ -332,9 +334,28 @@ scanf("%d", &choice);
 switch (choice){
 
     case 1:
+
         plus_student:
 
-        add_student();
+        printf("Enter Personnummer: ");
+        scanf("%d", &per_num);
+
+        printf("Enter first and last name: ");
+        scanf("%s %s", &first_name, &last_name); 
+
+        printf("Enter gender (M/F): ");
+        scanf("%s", &gender);
+
+        printf("Enter Program: ");
+        scanf("%s", &program);
+
+        printf("Enter age: ");
+        scanf("%d", &age);
+
+        printf("Enter Email: ");
+        scanf("%s", &email);
+
+        add_student(per_num, first_name, last_name, gender, program, age, email);
 
         char yn;
 
@@ -347,6 +368,15 @@ switch (choice){
         if (yn == 'y') {
             goto plus_student;
         }
+
+        node *temp = head; 
+
+        while(temp != NULL) {
+            printf("%d-->", temp->student->per_num);
+            temp = temp->next; // Move down the list to the last node
+        }
+
+        printf("\n"); 
 
     break; //A while loop could have been used here but a goto statement felt more readable and thus more fitting in this case
 
