@@ -13,31 +13,15 @@ typedef struct student{
 } student;
 
 typedef struct node{
-   // int index;
-    student student;
+    student *student;
     struct node *next;
     struct node *prev;
     
 } node;
 
-/* typedef struct {
-    Node *head;
-} StudentDatabase;
-
-StudentDatabase *initialize_database;
-
-StudentDatabase *db= (StudentDatabase*) malloc (sizeof(StudentDatabase));
-if (db == NULL)  {
-    printf("db init fail\n"):
-    return NULL
-}
-
-db->head = NULL; */
-
 int student_index = 0;
 
 node *head = NULL; //head of the list, points to nothing at init
-node *p = NULL; //Mediary pointer
 
 void add_student(){ 
 
@@ -52,19 +36,33 @@ void add_student(){
         exit(0);
     }
 
-    head = new_node; //the newly added student becomes the head of the list
+    new_node->student = new_student;
    
     new_node->next = NULL; //So that the last pointer in the list is always NULL
 
-    head->next = p;
+    new_node->prev = NULL;
 
-    p = new_node;
+    if (head == NULL) {
+        head = new_node;
+    }
+
+    else {
+        node *temp = head;
+
+        while (temp->next != NULL) {
+            temp = temp->next;
+        }
+
+        temp->next = new_node;
+
+        new_node->prev = temp;
+    }
 
     printf("Enter Personnummer: ");
     scanf("%d", &new_student->per_num);
 
-    printf("Enter first and last name: ");
-    scanf("%s %s", &new_student->first_name, &new_student->last_name);
+     printf("Enter first and last name: ");
+    scanf("%s %s", &new_student->first_name, &new_student->last_name); 
 
     printf("Enter gender (M/F): ");
     scanf("%s", &new_student->gender);
@@ -76,39 +74,41 @@ void add_student(){
     scanf("%d", &new_student->age);
 
     printf("Enter Email: ");
-    scanf("%s", &new_student->email);
+    scanf("%s", &new_student->email); 
 
     printf("\n\n");
 
     char yn;
 
-    printf("Would you like to enter another student?");
-    scanf(" %s", yn);
+    printf("Would you like to enter another student? \nEnter y for yes and any other key for no.");
 
-    if (yn = 'y') {
+    scanf(" %c", &yn);
+
+    printf("\r\n\n");
+
+    if (yn == 'y') {
         add_student();
     }
 
-    else return;
+        node *temp = head; 
 
-   /*  if (head==NULL) {
-        head = new_node;
-        new_node->previous = NULL;
-        new_node->next = NULL; 
-    } 
-    
-    else {
-        node *current = head;
-        while (current -> next != NULL){
-            current = current ->next;
+        while(temp != NULL) {
+            printf("%d-->", temp->student->per_num);
+            temp = temp->next; // Move down the list to the last node
         }
-        current ->next = new_node;
-        new_node -> previous = current;        
+
+        printf("\n");
+ 
+    /* while(temp != NULL && temp->next != NULL) {
+        temp = temp->next; // Move down the list to the last node
     }
-    
-    current -> next = new_node;
-    new_node -> previous = current;
-    new_node -> next = NULL */;
+
+    while (temp != NULL){
+        printf("%d<--", temp->student.first_name);
+        temp = temp->prev; // Start moving up towards the head
+    }
+
+    printf("\n"); */
 
 }
 
@@ -265,12 +265,7 @@ The program sks to save the database. Then it will do the same actions in option
 }
 int main(){
     
-    
 node * head = NULL;
-head = (node*) malloc(sizeof(node));
-
-//Database/linked list initialization
-    
 
 int choice = 0;
 
