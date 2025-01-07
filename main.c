@@ -4,12 +4,12 @@
 
 typedef struct student{
     int per_num;
-    char first_name[50];
-    char last_name[50];
-    char gender;
-    char program[50];
+    char first_name[256];
+    char last_name[256];
+    char gender; 
+    char program[256];
     int age;
-    char email[100];
+    char email[256];
 } student;
 
 typedef struct node{
@@ -21,7 +21,7 @@ typedef struct node{
 
 node *head = NULL; //head of the list, points to nothing at init
 
-void add_student(int per_num, char *first_name, char *last_name, char *gender, char *program, int age, char *email){ 
+node *add_student(int per_num, char *first_name, char *last_name, char gender, char *program, int age, char *email){ 
 
     node* new_node = (node*) malloc (sizeof(node));
 
@@ -58,28 +58,17 @@ void add_student(int per_num, char *first_name, char *last_name, char *gender, c
 
     new_student->per_num = per_num;
 
-    *new_student->first_name = first_name;
+    strcpy(new_student->first_name,  first_name);
 
-    *new_student->last_name = last_name;
+    strcpy(new_student->last_name, last_name);
 
     new_student->gender = gender;
 
-    *new_student->program = program;
+    strcpy(new_student->program, program);
 
     new_student->age = age;
 
-    *new_student->email = email;
-
-    printf("\n\n");
-
-    /* node *temp = head; 
-
-    while(temp != NULL) {
-        printf("%d-->", temp->student->per_num);
-        temp = temp->next; // Move down the list to the last node
-    }
-
-    printf("\n"); */
+    strcpy(new_student->email, email);
  
     /* while(temp != NULL && temp->next != NULL) {
         temp = temp->next; // Move down the list to the last node
@@ -148,7 +137,6 @@ for (int i = 0; i <student_index; i++){
 
 */
 }
-
 
 void delete_student(){
 /*
@@ -226,15 +214,15 @@ it will be overwritten and if it does not exist it has to be created
 
     while (temp != NULL) {
 
-        fprintf(filptr, "%d,", temp->student->per_num);      //per_num
-        fprintf(filptr, "%s,", temp->student->first_name);   //first_name
-        fprintf(filptr, "%s,", temp->student->last_name);    //last_name
-        fprintf(filptr, "%s,", temp->student->gender);       //gender
-        fprintf(filptr, "%s,", temp->student->program);      //program
-        fprintf(filptr, "%d,", temp->student->age);          //age
-        fprintf(filptr, "%s,", temp->student->email);        //email
+        fprintf(filptr, "%d, ", temp->student->per_num);      //per_num
+        fprintf(filptr, "%s, ", temp->student->first_name);   //first_name
+        fprintf(filptr, "%s, ", temp->student->last_name);    //last_name
+        fprintf(filptr, "%s, ", temp->student->gender);       //gender
+        fprintf(filptr, "%s, ", temp->student->program);      //program
+        fprintf(filptr, "%d, ", temp->student->age);          //age
+        fprintf(filptr, "%s, ", temp->student->email);        //email
         
-        fprintf(filptr, "\n");
+        //fprintf(filptr, "\n");
         
         temp = temp->next;
     }
@@ -253,20 +241,6 @@ in the database will be overwritten by the information from the file. Therefore 
 */
 
     head = NULL; //Makes head  NULL since any previous information in the database will be overwritten/discarded
-
-   /*  scanf("%d", &new_student->per_num);
-
-    scanf("%s %s", &new_student->first_name, &new_student->last_name); 
-
-    scanf("%s", &new_student->gender);
-
-    scanf("%s", &new_student->program);
-
-    scanf("%d", &new_student->age);
-
-    scanf("%s", &new_student->email);  */
-
-    printf("\n\n");
 
     /* node *temp = head; 
 
@@ -319,12 +293,10 @@ int main(){
 int per_num;
 char first_name[50];
 char last_name[50];
-char gender[3];
+char gender;
 char program[50];
 int age;
 char email[100];
-    
-node * head = NULL;
 
 int choice = 0;
 
@@ -355,26 +327,28 @@ switch (choice){
         printf("Enter Email: ");
         scanf("%s", &email);
 
-        add_student(per_num, first_name, last_name, gender, program, age, email);
+        head = add_student(per_num, first_name, last_name, gender, program, age, email);
 
         char yn;
 
-        printf("Would you like to enter another student? \nEnter y for yes. Enter any other key for no.");
+        printf("Would you like to enter another student? \nEnter y for yes. Enter any other key for no.\n\n");
 
         scanf(" %c", &yn);
-
-        printf("\r\n\n");
 
         if (yn == 'y') {
             goto plus_student;
         }
 
-        node *temp = head; 
+        printf("\r\n\n");
+
+       /*  node *temp = head; 
 
         while(temp != NULL) {
-            printf("%d-->", temp->student->per_num);
+            printf("%s-->", temp->student->first_name);
             temp = temp->next; // Move down the list to the last node
-        }
+        } */
+ 
+        //for checking
 
         printf("\n"); 
 
@@ -383,52 +357,83 @@ switch (choice){
     case 2:
         modify_student();
 
-    break;
+        break;
 
     case 3:
         delete_student();
 
-    break;
+        break;
 
     case 4:
         search_student();
 
-    break;
+        break;
 
     case 5:
         save_file();
 
-    break;
+        break;
 
     case 6:
-        load_file();
 
-    break;
+        char filename[256];
+
+        printf("\nEnter file name: ");
+        scanf(" %s", &filename);
+
+        FILE *filptr = fopen(filename, "r");
+
+        while (feof(filptr) == 0) {
+
+            fscanf(filptr, "%d ", &per_num);
+            fscanf(filptr, "%s ", &first_name);
+            fscanf(filptr, "%s ", &last_name);
+            fscanf(filptr, "%c ", &gender);
+            fscanf(filptr, "%s ", &program);
+            fscanf(filptr, "%d ", &age);
+            fscanf(filptr, "%s\n", &email);
+
+           head = add_student(per_num, first_name, last_name, gender, program, age, email);
+
+        }
+
+        node *temp = head; 
+
+        while(temp != NULL) {
+            printf("%d ", temp->student->per_num);
+            printf("%s ", temp->student->first_name);
+            printf("%s ", temp->student->last_name);
+            printf("%c ", temp->student->gender);
+            printf("%s ", temp->student->program);
+            printf("%d ", temp->student->age);
+            printf("%s-->\n", temp->student->email);
+            temp = temp->next; // Move down the list to the last node
+        }
+
+        printf("\ndatabase loaded\n");
+
+        break;
 
     case 7:
         add_program();
 
-    break;
+        break;
 
     case 8:
         modify_program();
 
-    break;
+        break;
 
     case 9:
         exit_function();
     
-    break;
-
-    main();
+        break;
 
     default:
+        printf("\n\nPlease enter a number from 1 to 9\n\n");
 
-}
+        break;
+    }
 
-//char *study_prg = &student.gender;
-
-
-
-
+    main();
 }
