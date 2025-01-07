@@ -13,7 +13,7 @@ char email[256];
 
 //Temporary storage^^
 
-node *temp; 
+node *temp = NULL; 
 
 void add_single(){
 
@@ -173,7 +173,7 @@ it will be overwritten and if it does not exist it has to be created
     char filename[256];
 
     printf("\n\nPlease enter the file you would like to save to. If no such file exists a new one will be created.\nAny pre-existing information in the file will be overwritten\n\n");
-    scanf("");
+    scanf("%s", &filename);
 
     FILE *filptr = fopen(filename, "w");
 
@@ -184,7 +184,7 @@ it will be overwritten and if it does not exist it has to be created
         fprintf(filptr, "%d ", temp->student->per_num);      //per_num
         fprintf(filptr, "%s ", temp->student->first_name);   //first_name
         fprintf(filptr, "%s ", temp->student->last_name);    //last_name
-        fprintf(filptr, "%s ", temp->student->gender);       //gender
+        fprintf(filptr, "%c ", temp->student->gender);       //gender
         fprintf(filptr, "%s ", temp->student->program);      //program
         fprintf(filptr, "%d ", temp->student->age);          //age
         fprintf(filptr, "%s\n", temp->student->email);        //email
@@ -237,6 +237,7 @@ void load_file(){
 
     printf("\ndatabase loaded\n");
 
+    fclose(filptr);
 
 }
 
