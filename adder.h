@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+
 typedef struct program{
     char prog_name[50];
     char prog_code[10];
@@ -11,14 +12,14 @@ typedef struct program{
 
 int prog_count = 0;
 
-program array_prog[50]; // Create a static array of 50 program structs
+struct program array_prog[50]; // Create a static array of 50 program structs
 
 typedef struct student{
     int per_num;
     char first_name[256];
     char last_name[256];
     char gender; 
-    program* study_program;
+    struct program* study_program;
     int age;
     char email[256];
 } student;
@@ -89,7 +90,7 @@ node *add_student(int per_num, char *first_name, char *last_name, char gender, c
 
         else{
             printf("Program not found, use option 11 to see list of programs\n");
-            return;
+            return NULL;
         }
     }
 

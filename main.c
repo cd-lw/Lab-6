@@ -7,7 +7,7 @@ int per_num;
 char first_name[256];
 char last_name[256];
 char gender;
-char program[256];
+char program_buffer[256];
 int age;
 char email[256];
 
@@ -15,8 +15,7 @@ char email[256];
 
 node *temp = NULL;
 
-void add_single()
-{
+void add_single() {
 
 plus_student:
 
@@ -30,7 +29,7 @@ plus_student:
     scanf("%s", &gender);
 
     printf("Enter Program: ");
-    scanf("%s", &program);
+    scanf("%s", &program_buffer);
 
     printf("Enter age: ");
     scanf("%d", &age);
@@ -38,7 +37,7 @@ plus_student:
     printf("Enter Email: ");
     scanf("%s", &email);
 
-    head = add_student(per_num, first_name, last_name, gender, program, age, email);
+    head = add_student(per_num, first_name, last_name, gender, program_buffer, age, email);
 
     char yn;
 
@@ -54,8 +53,7 @@ plus_student:
     printf("\n");
 }
 
-void modify_student(int per_num)
-{
+void modify_student(int per_num) {
     temp = head;
 
     if (temp->student == NULL)
@@ -90,8 +88,7 @@ void modify_student(int per_num)
     return;
 }
 
-void delete_student()
-{
+void delete_student() {
     /*
         int per_num
         printf("Enter Personnumber: ")
@@ -125,32 +122,90 @@ void delete_student()
     */
 }
 
-void search_student()
-{
-    /*
-    int choice2 = 0;
-    printf(" 1. Personal number:\n 2. Name\n 3. Study Program\n 4. Statistics");
-    scanf("%d" , choice2);
+void search_student() {
+    // Ask user input
+    int choice;
+    printf("Choose a search method:\n");
+    printf("1. Search by Personal Number\n");
+    printf("2. Search by Name\n");
+    printf("3. Search by Program\n");
+    printf("Enter your choice: ");
+    scanf("%d", &choice);
 
-    switch(choice2); {
-        case 1:
-        break;
+    if (choice == 1) {
+        // Search by Personal Number
+        int per_num;
+        printf("Enter the personal number: ");
+        scanf("%d", &per_num);
 
-        case 2:
-        break;
+        temp = head;
+        while (temp != NULL) {
+            if (temp->student->per_num == per_num) {
+                printf("Student found!\n");
+                printf("Personal Number: %d\n", temp->student->per_num);
+                printf("First Name: %s\n", temp->student->first_name);
+                printf("Last Name: %s\n", temp->student->last_name);
+                printf("Gender: %c\n", temp->student->gender);
+                printf("Program: %s\n", temp->student->study_program);
+                printf("Age: %d\n", temp->student->age);
+                printf("Email: %s\n", temp->student->email);
+                return; 
+            }
+            temp = temp->next;
+        }
+        printf("No student found with that personal number.\n");
 
-        case 3:
-        break;
+    } else if (choice == 2) {
+        // Search by Name
+        char name[256];
+        printf("Enter the name of the student ");
+        scanf("%s %s", name, name + strlen(name) + 1);
 
-        case 4:
-        break;
+        temp = head;
+        while (temp != NULL) {
+            if (strcmp(temp->student->first_name, name) == 0 && strcmp(temp->student->last_name, name + strlen(name) + 1) == 0) {
+                printf("Student found!\n");
+                printf("Personal Number: %d\n", temp->student->per_num);
+                printf("First Name: %s\n", temp->student->first_name);
+                printf("Last Name: %s\n", temp->student->last_name);
+                printf("Gender: %c\n", temp->student->gender);
+                printf("Program: %s\n", temp->student->study_program);
+                printf("Age: %d\n", temp->student->age);
+                printf("Email: %s\n", temp->student->email);
+                return; 
+            }
+            temp = temp->next;
+        }
+        printf("No student found with that name.\n");
 
+    } else if (choice == 3) {
+        // Search by Program
+        printf("Enter the program: ");
+        scanf("%s", program_buffer);
+
+        temp = head;
+        while (temp != NULL) {
+            if (strcmp(temp->student->study_program->prog_name, program_buffer) == 0) {
+                printf("Student found!\n");
+                printf("Personal Number: %d\n", temp->student->per_num);
+                printf("First Name: %s\n", temp->student->first_name);
+                printf("Last Name: %s\n", temp->student->last_name);
+                printf("Gender: %c\n", temp->student->gender);
+                printf("Program: %s\n", temp->student->study_program);
+                printf("Age: %d\n", temp->student->age);
+                printf("Email: %s\n", temp->student->email);
+                return; 
+            }
+            temp = temp->next;
+        }
+        printf("No student found in that program.\n");
+
+    } else {
+        printf("Invalid choice.\n");
     }
-    */
 }
 
-void save_file()
-{
+void save_file() {
     /*
     The program asks for a file name and saves all information in the database into the file. If the file exits,
     it will be overwritten and if it does not exist it has to be created
@@ -186,8 +241,7 @@ void save_file()
     return;
 }
 
-void load_file()
-{
+void load_file() {
 
     char filename[256];
 
@@ -203,11 +257,11 @@ void load_file()
         fscanf(filptr, "%s ", &first_name);
         fscanf(filptr, "%s ", &last_name);
         fscanf(filptr, "%c ", &gender);
-        fscanf(filptr, "%s ", &program);
+        fscanf(filptr, "%s ", &program_buffer);
         fscanf(filptr, "%d ", &age);
         fscanf(filptr, "%s\n", &email);
 
-        head = add_student(per_num, first_name, last_name, gender, program, age, email);
+        head = add_student(per_num, first_name, last_name, gender, program_buffer, age, email);
     }
 
     node *temp = head;
