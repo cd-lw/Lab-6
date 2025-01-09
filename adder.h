@@ -2,12 +2,23 @@
 #include <stdlib.h>
 #include <string.h>
 
+typedef struct program{
+    char prog_name[50];
+    char prog_code[10];
+    char prog_resp[50];
+    char resp_email[100];    
+} program;
+
+int prog_count = 0;
+
+program array_prog[50]; // Create a static array of 50 program structs
+
 typedef struct student{
     int per_num;
     char first_name[256];
     char last_name[256];
     char gender; 
-    char program[256];
+    program* study_program;
     int age;
     char email[256];
 } student;
@@ -40,6 +51,9 @@ node *add_student(int per_num, char *first_name, char *last_name, char gender, c
 
     new_node->prev = NULL;
 
+    new_student->study_program = NULL; // Assigned to NULL to avoid undefined behavior if no programs are added
+
+
     if (head == NULL) {
         head = new_node;
     }
@@ -64,22 +78,20 @@ node *add_student(int per_num, char *first_name, char *last_name, char gender, c
 
     new_student->gender = gender;
 
-    strcpy(new_student->program, program);
-
     new_student->age = age;
 
     strcpy(new_student->email, email);
- 
-    /* while(temp != NULL && temp->next != NULL) {
-        temp = temp->next; // Move down the list to the last node
-    }
+    
+    for(int i = 0; i<prog_count; i++){
+        if(strcmp(array_prog[i].prog_name, program) == 0){ // Program inputted by user must match any of the programs in the array
+            new_student->study_program = &array_prog[i];
+        }
 
-    while (temp != NULL){
-        printf("%d<--", temp->student.first_name);
-        temp = temp->prev; // Start moving up towards the head
+        else{
+            printf("Program not found, use option 11 to see list of programs\n");
+            return;
+        }
     }
-
-    printf("\n"); */
 
     return head; //returns the head pointer of the list
 }
