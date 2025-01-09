@@ -276,47 +276,50 @@ switch (choice){
 
     case 1:
         add_single();
+        //done
 
     break; //A while loop could have been used here but a goto statement felt more readable and thus more fitting in this case
 
     case 2:
         modify_student();
-
+        //done not merged
         break;
 
     case 3:
         delete_student();
-
+        //done not merged
         break;
 
     case 4:
         search_student();
-
+        //almost done
         break;
 
     case 5:
         save_file();
-
+        //done
         break;
 
     case 6:
         load_file();
-
+        //done
         break;
 
     case 7:
         add_program();
-
+        //done not merged
         break;
 
     case 8:
         modify_program();
-
+        //done not merged
         break;
 
     case 9:
+        save_file();
+
         exit_function();
-    
+        //done
         break;
 
     default:
@@ -333,6 +336,8 @@ switch (choice){
             printf("%s-->\n", temp->student->email);
             temp = temp->next; // Move down the list to the last node
         }
+
+        //for debugging
 
         printf("\n\nPlease enter a number from 1 to 9\n\n");
 
