@@ -1,4 +1,10 @@
-574422 Julia lastname M Engineering 24 julia574422@studentmail.com
+
+Physics 1387434970 resp5 resp5@email
+Biology 1387434760 resp4 resp4@email
+Mathematics 1387434550 resp3 resp3@email
+Computer-Science 1387434340 resp2 resp2@email
+
+
 174190 Bob lastname F Computer-Science 19 bob174190@studentmail.com
 149956 Fiona lastname F Mathematics 24 fiona149956@studentmail.com
 138515 Charlie lastname M Mathematics 24 charlie138515@studentmail.com

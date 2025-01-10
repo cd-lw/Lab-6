@@ -1,3 +1,9 @@
+Engineering E012T resp1 resp1@email
+Computer-Science C418 resp2 resp2@email
+Mathematics M003G resp3 resp3@email
+Biology B25DT resp4 resp4@email
+Physics P027F resp5 resp5@email
+|
 574422 Julia lastname M Engineering 24 julia574422@studentmail.com
 174190 Bob lastname F Computer-Science 19 bob174190@studentmail.com
 149956 Fiona lastname F Mathematics 24 fiona149956@studentmail.com

@@ -4,16 +4,19 @@
 #include "adder.h" //Contains structs as well as function for adding students
 
 int per_num;
-char first_name[256];
-char last_name[256];
+char first_name[64];
+char last_name[64];
 char gender;
-char program_buffer[256];
+char program_buffer[128];
 int age;
 char email[256];
 
-// Temporary storage^^
+char prog_n[64];
+char prog_c[10];
+char resp_n[64];
+char resp_e[128];
 
-node *temp = NULL;
+// Temporary IO buffers ^^
 
 void add_single() {
 
@@ -56,10 +59,8 @@ plus_student:
 void modify_student(int per_num) {
     temp = head;
 
-    if (temp->student == NULL)
-        ;
-    {
-        printf("No students in database");
+    if (temp->student == NULL){
+        printf("No students in database\n\n");
         return;
     }
 
@@ -89,40 +90,39 @@ void modify_student(int per_num) {
 }
 
 void delete_student() {
-    /*
-        int per_num
-        printf("Enter Personnumber: ")
-            scanf(%d, &per_num);
-        node_s *current=head;
-        node_s *previous =NULL;
-
-        while (current !=NULL) {
-            if (current -> currentd-> pernum==per_num) {
-                if(previous ==NULL)
-                previous->next = current->next;
-                }
-
-            else{
-                previous->next = current->next;
-                if (current -> next !=NULL) {
-                    current ->next ->previous = previous;
-            }
-        }
-
-        printf("Student  %d deleted\n" , per_num);
-
+    if (head == NULL) {
+        printf("The list is empty. No students to delete.\n");
         return;
+    }
+    int per_num;
+    printf("Enter the personal number of the student to delete: ");
+    scanf("%d", &per_num);  //to find student personal number 
 
+    node *temp = head;
+
+
+    while (temp != NULL) {
+        if (temp->student->per_num == per_num) {
+            if (temp->prev != NULL) {
+                temp->prev->next = temp->next; 
+            } else {
+                head = temp->next;  //update head if being deleted 
+            }
+
+            if (temp->next != NULL) {
+                temp->next->prev = temp->prev; 
+            }
+            printf("Student with personal number %d has been deleted.\n", per_num);
+            return;
         }
-            previous = current:
-            current = current->next:
-        }
-            printf ("not found %d \n", per_num):
-        }
-    */
+        temp = temp->next; 
+    }
+    printf("No student found with personal number %d.\n", per_num);
 }
 
-void search_student() {
+void search_student()
+{
+
     // Ask user input
     int choice;
     printf("Choose a search method:\n");
@@ -132,15 +132,18 @@ void search_student() {
     printf("Enter your choice: ");
     scanf("%d", &choice);
 
-    if (choice == 1) {
+    if (choice == 1)
+    {
         // Search by Personal Number
         int per_num;
         printf("Enter the personal number: ");
         scanf("%d", &per_num);
 
         temp = head;
-        while (temp != NULL) {
-            if (temp->student->per_num == per_num) {
+        while (temp != NULL)
+        {
+            if (temp->student->per_num == per_num)
+            {
                 printf("Student found!\n");
                 printf("Personal Number: %d\n", temp->student->per_num);
                 printf("First Name: %s\n", temp->student->first_name);
@@ -149,21 +152,24 @@ void search_student() {
                 printf("Program: %s\n", temp->student->study_program);
                 printf("Age: %d\n", temp->student->age);
                 printf("Email: %s\n", temp->student->email);
-                return; 
+                return;
             }
             temp = temp->next;
         }
         printf("No student found with that personal number.\n");
-
-    } else if (choice == 2) {
+    }
+    else if (choice == 2)
+    {
         // Search by Name
         char name[256];
         printf("Enter the name of the student ");
         scanf("%s %s", name, name + strlen(name) + 1);
 
         temp = head;
-        while (temp != NULL) {
-            if (strcmp(temp->student->first_name, name) == 0 && strcmp(temp->student->last_name, name + strlen(name) + 1) == 0) {
+        while (temp != NULL)
+        {
+            if (strcmp(temp->student->first_name, name) == 0 && strcmp(temp->student->last_name, name + strlen(name) + 1) == 0)
+            {
                 printf("Student found!\n");
                 printf("Personal Number: %d\n", temp->student->per_num);
                 printf("First Name: %s\n", temp->student->first_name);
@@ -172,20 +178,23 @@ void search_student() {
                 printf("Program: %s\n", temp->student->study_program);
                 printf("Age: %d\n", temp->student->age);
                 printf("Email: %s\n", temp->student->email);
-                return; 
+                return;
             }
             temp = temp->next;
         }
         printf("No student found with that name.\n");
-
-    } else if (choice == 3) {
+    }
+    else if (choice == 3)
+    {
         // Search by Program
         printf("Enter the program: ");
         scanf("%s", program_buffer);
 
         temp = head;
-        while (temp != NULL) {
-            if (strcmp(temp->student->study_program->prog_name, program_buffer) == 0) {
+        while (temp != NULL)
+        {
+            if (strcmp(temp->student->study_program->prog_name, program_buffer) == 0)
+            {
                 printf("Student found!\n");
                 printf("Personal Number: %d\n", temp->student->per_num);
                 printf("First Name: %s\n", temp->student->first_name);
@@ -194,18 +203,41 @@ void search_student() {
                 printf("Program: %s\n", temp->student->study_program);
                 printf("Age: %d\n", temp->student->age);
                 printf("Email: %s\n", temp->student->email);
-                return; 
+                return;
             }
             temp = temp->next;
         }
         printf("No student found in that program.\n");
-
-    } else {
+    }
+    else
+    {
         printf("Invalid choice.\n");
     }
 }
 
-void save_file() {
+void add_program(char *prog_name, char *prog_code, char *prog_resp, char *resp_email)
+{
+    /*
+    The program asks for a file name and saves all information in the database into the file. If the file exits, it will be overwritten
+    and if it does not exist it has to be created.
+    */
+
+    if (prog_count == 50)
+    {
+        printf("Reached maximum program limit");
+        return;
+    }
+
+    strcpy(array_prog[prog_count].prog_name, prog_name);
+    strcpy(array_prog[prog_count].prog_code, prog_code);
+    strcpy(array_prog[prog_count].prog_resp, prog_resp);
+    strcpy(array_prog[prog_count].resp_email, resp_email);
+    prog_count++;
+    return;
+}
+
+void save_file()
+{
     /*
     The program asks for a file name and saves all information in the database into the file. If the file exits,
     it will be overwritten and if it does not exist it has to be created
@@ -217,6 +249,17 @@ void save_file() {
     scanf("%s", &filename);
 
     FILE *filptr = fopen(filename, "w");
+
+    while (prog_count != 0)
+    {
+        fprintf(filptr, "%s ", array_prog[prog_count].prog_name);
+        fprintf(filptr, "%d ", array_prog[prog_count].prog_code);
+        fprintf(filptr, "%s ", array_prog[prog_count].prog_resp);
+        fprintf(filptr, "%s\n", array_prog[prog_count].resp_email);
+        prog_count--;
+    }
+
+    fprintf(filptr, "|\n");
 
     temp = head;
 
@@ -250,6 +293,20 @@ void load_file() {
 
     FILE *filptr = fopen(filename, "r");
 
+    while (fgetc(filptr) != '|') {
+
+        fseek(filptr, -1, SEEK_CUR); //Move filepointer back one step to counteract fgetc moving it forward
+    
+        fscanf(filptr, "%s ", &prog_n);
+        fscanf(filptr, "%s ", &prog_c);
+        fscanf(filptr, "%s ", &resp_n);
+        fscanf(filptr, "%s\n", &resp_e);
+
+        add_program(prog_n, prog_c, resp_n, resp_e);
+    }
+
+    //fseek(filptr, 1, SEEK_CUR);
+
     while (feof(filptr) == 0)
     {
 
@@ -264,7 +321,7 @@ void load_file() {
         head = add_student(per_num, first_name, last_name, gender, program_buffer, age, email);
     }
 
-    node *temp = head;
+    temp = head;
 
     while (temp != NULL)
     {
@@ -283,51 +340,12 @@ void load_file() {
     fclose(filptr);
 }
 
-void add_program()
-{
-    /*
-    The program asks for a file name and saves all information in the database into the file. If the file exits, it will be overwritten
-    and if it does not exist it has to be created.
-    */
-    char prog_n[64];
-    char prog_c[10];
-    char resp_n[64];
-    char resp_e[128];
-    // Temp buffer^^
-
-    if (prog_count > 50)
-    {
-        printf("Reached maximum program limit");
-        return;
-    }
-
-    printf("Name of program: \n");
-    scanf("%s", &prog_n);
-    printf("Program code: \n");
-    scanf("%s", &prog_c);
-    printf("Name of program responsible: \n");
-    scanf("%s", &resp_n);
-    printf("Responsible email: \n");
-    scanf("%s", &resp_e);
-
-    strcpy(array_prog[prog_count].prog_name, prog_n);
-    strcpy(array_prog[prog_count].prog_code, prog_c);
-    strcpy(array_prog[prog_count].prog_resp, resp_n);
-    strcpy(array_prog[prog_count].resp_email, resp_e);
-    prog_count++;
-}
-
-void modify_program()
-{
+void modify_program() {
     /*
     The program ask the program by asking its code and let the user to modify informations about the program
     */
 
     char name[50];
-    char prog_n1[50];
-    char prog_c1[10];
-    char resp_n1[50];
-    char resp_e1[100];
 
     printf("\n\nType in the name of the program you would like to modify: ");
     scanf("%s", &name);
@@ -335,20 +353,20 @@ void modify_program()
     for (int i = 0; i < prog_count; i++)
     {
         if (strcmp(array_prog[i].prog_name, name) == 0)
-        {   // Loop through all arrays until an element in an array matches the name inputted by the user
+        { // Loop through all arrays until an element in an array matches the name inputted by the user
             printf("Enter new program name: \n");
-            scanf("%s", &prog_n1);
+            scanf("%s", &prog_n);
             printf("Enter new program code: \n");
-            scanf("%s", &prog_c1);
+            scanf("%s", &prog_c);
             printf("Enter new program responsible: \n");
-            scanf("%s", &resp_n1);
+            scanf("%s", &resp_n);
             printf("Enter program responsible email: \n");
-            scanf("%s", &resp_e1);
+            scanf("%s", &resp_e);
 
-            strcpy(array_prog[i].prog_name, prog_n1);
-            strcpy(array_prog[i].prog_code, prog_c1);
-            strcpy(array_prog[i].prog_resp, resp_n1);
-            strcpy(array_prog[i].resp_email, resp_e1);
+            strcpy(array_prog[i].prog_name, prog_n);
+            strcpy(array_prog[i].prog_code, prog_c);
+            strcpy(array_prog[i].prog_resp, resp_n);
+            strcpy(array_prog[i].resp_email, resp_e);
 
             return;
         }
@@ -361,8 +379,7 @@ void modify_program()
     }
 }
 
-void exit_function()
-{
+void exit_function() {
     /*
     The program sks to save the database. Then it will do the same actions in option 5 (Save) and then exits.
     */
@@ -374,11 +391,11 @@ void exit_function()
     scanf("%s", &choice1);
     if (choice1 == 'y')
     {
-        // Some code for file saving
-        // Some code for file saving
+        save_file();
+
         while (temp != NULL)
-        {                           // Traverse through all nodes and free the one by one
-            next_temp = temp->next; // Since temp will be freed we must pre define the next node so that we can keep track of the nodes
+        {                           // Traverse through all nodes and free them one by one
+            next_temp = temp->next; // Since temp will be freed we must predefine the next node so that we can keep track of them
             free(temp->student);
             temp = next_temp;
         }
@@ -405,19 +422,25 @@ void exit_function()
     }
 }
 
-void print_function(){
-    node* temp = head;
+void print_function() {
+    temp = head;
+
+    if (temp == NULL) {printf("\nNo students in memory\n");}
+
     printf("-------------------------------------------------\n");
-    while (temp != NULL){
+    while (temp != NULL)
+    {
         printf("Personal Number: %d\n", temp->student->per_num);
         printf("First Name: %s\n", temp->student->first_name);
         printf("Last Name: %s\n", temp->student->last_name);
         printf("Gender: %s\n", temp->student->gender);
 
-        if(temp->student->study_program != NULL){
-        printf("Program: %s\n", temp->student->study_program);
+        if (temp->student->study_program != NULL)
+        {
+            printf("Program: %s\n", temp->student->study_program);
         }
-        else{
+        else
+        {
             printf("Program: Not assigned");
         }
 
@@ -428,9 +451,12 @@ void print_function(){
     }
 }
 
-void print_programs(){
-    printf("Amount of programs: %d\n" , prog_count);
-    for(int i = 0; i<prog_count; i++){
+void print_programs() {
+    printf("\n\nAmount of programs: %d\n", prog_count);
+    printf("-----------------------------------------\n\n");
+
+    for (int i = 0; i < prog_count; i++)
+    {
         printf("-----------------------------------------\n");
         printf("Program Name: %s\n", array_prog[i].prog_name);
         printf("Program code: %s\n", array_prog[i].prog_code);
@@ -445,7 +471,7 @@ int main()
 
     int choice = 0;
 
-    printf("Enter a number:\n 1. Add\n 2. Modify\n 3. Delete\n 4. Search\n 5. Save\n 6. Load\n 7. Add program\n 8. Modify program\n 9. Exit\n 10. See functions\n 11. See Programs");
+    printf("\nEnter a number:\n 1. Add\n 2. Modify\n 3. Delete\n 4. Search\n 5. Save\n 6. Load\n 7. Add program\n 8. Modify program\n 9. Exit\n 10. See list of students\n 11. See Programs\n\n");
     scanf("%d", &choice);
 
     switch (choice)
@@ -472,7 +498,7 @@ int main()
 
     case 4:
         search_student();
-        // almost done
+        // done
         break;
 
     case 5:
@@ -486,7 +512,17 @@ int main()
         break;
 
     case 7:
-        add_program();
+
+        printf("Name of program: \n");
+        scanf("%s", &prog_n);
+        printf("Program code: \n");
+        scanf("%s", &prog_c);
+        printf("Name of program responsible: \n");
+        scanf("%s", &resp_n);
+        printf("Responsible email: \n");
+        scanf("%s", &resp_e);
+
+        add_program(prog_n, prog_c, resp_n, resp_e);
         // done
         break;
 
@@ -505,7 +541,7 @@ int main()
         print_function();
         break;
 
-     case 11:
+    case 11:
 
         print_programs();
         break;
