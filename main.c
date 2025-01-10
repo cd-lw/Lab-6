@@ -16,6 +16,8 @@ char prog_c[10];
 char resp_n[64];
 char resp_e[128];
 
+char filename[256];
+
 // Temporary IO buffers ^^
 
 void add_single() {
@@ -42,6 +44,10 @@ plus_student:
 
     head = add_student(per_num, first_name, last_name, gender, program_buffer, age, email);
 
+    if (head == NULL) {
+        printf("\n\nFailed to add student\n\n");
+    }
+
     char yn;
 
     printf("Would you like to enter another student? \nEnter y for yes. Enter any other key for no.\n\n");
@@ -59,6 +65,8 @@ plus_student:
 void modify_student(int per_num) {
     temp = head;
 
+    int modchoice;
+
     if (temp->student == NULL){
         printf("No students in database\n\n");
         return;
@@ -68,19 +76,41 @@ void modify_student(int per_num) {
     { // Traverse through all the nodes from the head until a matching personal number is found
         if (temp->student->per_num == per_num)
         {
-            printf("Enter new first name: ");
-            scanf("%s", temp->student->first_name);
-            printf("Enter new last name: ");
-            scanf("%s", temp->student->last_name);
-            printf("Enter new gender: ");
-            scanf("%s", temp->student->gender);
-            printf("Enter new program: ");
-            scanf("%s", temp->student->study_program);
-            printf("Enter new age: ");
-            scanf("%d", temp->student->age);
-            printf("Enter new email: ");
-            scanf("%s", temp->student->email);
-            getchar();
+            printf("What would you like to modify?\n\n1. First name 2. Last name 3. Gender 4. Program 5. Age 6. Email\n\n");
+            scanf(" %d", &modchoice);
+
+            switch(modchoice) {
+                
+                case 1:
+                    printf("Enter new first name: ");
+                    scanf("%s", temp->student->first_name);
+                    break;
+
+                case 2:
+                    printf("Enter new last name: ");
+                    scanf("%s", temp->student->last_name);
+                    break;
+
+                case 3:
+                    printf("Enter new gender: ");
+                    scanf("%s", temp->student->gender);
+                    break;
+
+                case 4:
+                    printf("Enter new program: ");
+                    scanf("%s", temp->student->study_program);
+                    break;
+                
+                case 5:
+                    printf("Enter new age: ");
+                    scanf("%d", temp->student->age);
+                    break;
+
+                case 6:
+                    printf("Enter new email: ");
+                    scanf("%s", temp->student->email);
+                    break;
+            }
             return;
         }
         temp = temp->next;
@@ -243,8 +273,6 @@ void save_file()
     it will be overwritten and if it does not exist it has to be created
     */
 
-    char filename[256];
-
     printf("\n\nPlease enter the file you would like to save to. If no such file exists a new one will be created.\nAny pre-existing information in the file will be overwritten\n\n");
     scanf("%s", &filename);
 
@@ -253,7 +281,7 @@ void save_file()
     while (prog_count != 0)
     {
         fprintf(filptr, "%s ", array_prog[prog_count].prog_name);
-        fprintf(filptr, "%d ", array_prog[prog_count].prog_code);
+        fprintf(filptr, "%s ", array_prog[prog_count].prog_code);
         fprintf(filptr, "%s ", array_prog[prog_count].prog_resp);
         fprintf(filptr, "%s\n", array_prog[prog_count].resp_email);
         prog_count--;
@@ -286,8 +314,6 @@ void save_file()
 
 void load_file() {
 
-    char filename[256];
-
     printf("\nEnter file name: ");
     scanf(" %s", &filename);
 
@@ -318,7 +344,7 @@ void load_file() {
         fscanf(filptr, "%d ", &age);
         fscanf(filptr, "%s\n", &email);
 
-        head = add_student(per_num, first_name, last_name, gender, program_buffer, age, email);
+        add_student(per_num, first_name, last_name, gender, program_buffer, age, email);
     }
 
     temp = head;
@@ -433,7 +459,7 @@ void print_function() {
         printf("Personal Number: %d\n", temp->student->per_num);
         printf("First Name: %s\n", temp->student->first_name);
         printf("Last Name: %s\n", temp->student->last_name);
-        printf("Gender: %s\n", temp->student->gender);
+        printf("Gender: %c\n", temp->student->gender);
 
         if (temp->student->study_program != NULL)
         {
@@ -532,7 +558,6 @@ int main()
         break;
 
     case 9:
-
         exit_function();
         // done
         break;
